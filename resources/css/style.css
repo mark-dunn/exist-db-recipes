@@ -1,0 +1,33 @@
+body {
+    background: #FAF7C4  !important;
+    color: #660000  !important;
+    font-family: verdana, arial, helvetica, sans-serif  !important;
+    margin: 0  !important;
+    padding: 0  !important;
+}
+
+/* Page title */
+h1 {
+    border-bottom: 1px solid #800000;
+    color: #800000;
+    background-color: #E6D9A6;
+    margin: 0;
+    padding: 0.5em 1em 0.5em 2em;
+    
+}
+
+div.dcContentBlock {
+    margin-left: 2em;
+    margin-top: 1em;
+}
+
+/*  override styles for betterForm */
+
+/* .xfRepeatIndex is the selected item in the form */
+.xfRepeatIndex {
+    background-color: #E6D9A6;
+}
+
+/* Application styles could go here */
+footer .poweredby { float: right; margin: 33px 10px 0 0;}
+footer .poweredby img { width: 120px; }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<r:recipe xmlns:r="http://ns.datacraft.co.uk/recipe" id="2">
+    <r:title>Orange and ginger</r:title>
+    <r:ingredients>
+        <r:ingredient xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.net/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms">chicken</r:ingredient>
+        <r:ingredient xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.net/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms">ginger</r:ingredient>
+        <r:ingredient xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.net/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms">orange</r:ingredient>
+    </r:ingredients>
+    <r:method>
+        <r:step>cook</r:step>
+        <r:step>cook more</r:step>
+    </r:method>
+</r:recipe>

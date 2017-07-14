@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<r:recipe xmlns:r="http://ns.datacraft.co.uk/recipe" id="">
+    <r:title/>
+    <r:ingredients>
+        <r:ingredient/>
+    </r:ingredients>
+    <r:method>
+        <r:step/>
+    </r:method>
+</r:recipe>
