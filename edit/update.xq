@@ -14,7 +14,7 @@ let $login := xmldb:login($data-collection, 'admin', '0verc00k')
 
 
 (: get the id out of the posted document :)
-let $id := $item/r:recipe/@id 
+let $id := $item/r:recipe/r:id/text()
 
 
 
@@ -34,11 +34,17 @@ return
 <html>
     <head>
        <title>Update Confirmation</title>
+       <link rel="stylesheet" type="text/css" href="../resources/css/style.css" />
+       
     </head>
     <body>
     <h1>Update Confirmation</h1>
-   
-        <p>Recipe {$id/text()} has been updated.</p>
+    
+    <div class="dcContentBlock">
+    <p>Recipe {$id/text()} has been updated.</p>
+    </div>
+    <div class="dcContentBlock">
     <p><a href="../index.html">Home</a> &gt; <a href="../views/list-items.xq">List all Recipes</a> </p>
+    </div>
    </body>
 </html>

@@ -10,6 +10,7 @@ let $q := request:get-parameter('q', "")
 let $search-results := collection($data-collection)/r:recipe[ft:query(descendant::*, $q)]
 let $count := count($search-results)
 
+
 return
 <html>
     <head>
@@ -23,7 +24,7 @@ return
         <p><b>Terms Found:</b> {$count}</p>
      <ol>{
            for $recipe in $search-results
-              let $id := $recipe/@id
+              let $id := $recipe/r:id/text()
               let $recipe-name := $recipe/r:title/text()
               order by upper-case($recipe-name)
           return
@@ -35,7 +36,7 @@ return
         </div>
         <div class="dcContentBlock">
             <p><a href="search-form.html">New Search</a></p>
-            <p><a href="../index.xq">Home</a></p>
+            <p><a href="../index.html">Home</a></p>
         </div>
 
    </body>

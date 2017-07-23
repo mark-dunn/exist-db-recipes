@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <r:recipe xmlns:r="http://ns.datacraft.co.uk/recipe">
-    <r:id>REPLACE_ME</r:id>
-    <r:title/>
+    <r:id>6</r:id>
+    <r:title>Broccoli pasta</r:title>
     <r:ingredients>
-        <r:ingredient/>
+        <r:ingredient>broccoli</r:ingredient>
     </r:ingredients>
     <r:method>
         <r:step/>

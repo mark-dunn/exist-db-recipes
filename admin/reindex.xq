@@ -14,13 +14,19 @@ return
 <html>
     <head>
        <title>Reindex</title>
+       <link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
     </head>
     <body>
-    <h1>Reindex</h1>
-    <p>The index for {$data-collection} was updated in 
-                 {$runtime-ms} milliseconds.</p>
-                 
-                         <p><a href="../index.html">Home</a></p>
-
+    <h1>Reindexing...</h1>
+    {
+    if (not($login)) 
+    then <div class="dcContentBlock"><p>LOGIN FAILED!</p></div>
+    else ()
+    }
+    
+    <div class="dcContentBlock">
+    <p>The index for {$data-collection} was updated in  {$runtime-ms} milliseconds.</p>
+    <p><a href="../index.html">Home</a></p>
+    </div>
     </body>
 </html>

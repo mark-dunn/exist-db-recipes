@@ -17,7 +17,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=yes";
             let $item-name := $item/r:title/text()
             order by $item-name
             return
-               <li><a href="view-item.xq?id={$item/@id}">{$item-name}</a></li>
+               <li><a href="view-item.xq?id={$item/r:id/text()}">{$item-name}</a></li>
       }</ol>
       </div>
       <div class="dcContentBlock">

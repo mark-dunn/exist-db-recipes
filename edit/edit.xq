@@ -6,14 +6,17 @@ declare option exist:serialize "method=xhtml media-type=text/xml indent=yes proc
 let $new := request:get-parameter('new', '')
 let $id := request:get-parameter('id', '')
 let $data-collection := '/db/apps/recipes/data/recipes'
-let $recipe := collection($data-collection)/r:recipe[@id=$id]
+let $recipe := collection($data-collection)/r:recipe[r:id/text() = $id]
+
+let $resource := if ($new = 'true') 
+    then 'save-new.xq' 
+    else 'update.xq'
 
 (: Put in the appropriate file name.  Use new-instance.xml for new forms and get the data
    from the data collection for updates.  :)
-let $file := if ($new) then 
-        'new-instance.xml'
-    else 
-        concat('../data/recipes/', $id, '.xml')
+let $file := if ($new = 'true') 
+    then 'new-instance.xml'
+    else concat('../data/recipes/', $id, '.xml')
 
 let $form := 
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -70,8 +73,19 @@ let $form :=
 
             <!-- http://www.ibm.com/developerworks/library/x-xformstipalerts/ -->
             <xf:bind nodeset="/r:recipe/r:ingredients/r:ingredient" id="message-test"/>
+            
+            <!-- replace="all" replaces the entire page with the response
+            
+            replace="instance" replaces only the instance in the edit form
+            -->
 
-            <xf:submission id="save" method="post" action="{if ($new='true') then ('save-new.xq') else ('update.xq')}" instance="my-task" replace="all"/>
+            <xf:submission id="save" method="post" resource="{$resource}" instance="this-recipe" replace="all">
+            <xf:action ev:event="xforms-submit-error">
+    <xf:message>Submit Error! Resource-uri: <xf:output value="event('resource-uri')"/>
+                Response-reason-phrase: <xf:output value="event('response-reason-phrase')"/>
+    </xf:message>
+  </xf:action>
+            </xf:submission>
        </xf:model>
     </head>
     <body>
