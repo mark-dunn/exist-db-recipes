@@ -24,13 +24,13 @@ declare
     %rest:path("/recipes")
     %rest:produces("application/xml", "text/xml")
 function app:all-recipes() {
-    <RECIPES>
+    <r:recipes>
     {
         for $recipe in collection($config:app-root || "/data/recipes")/r:recipe
         return
             $recipe
     }
-    </RECIPES>
+    </r:recipes>
 };
 
 
@@ -53,7 +53,7 @@ declare
     %rest:form-param("query", "{$query}", "")
     %rest:form-param("field", "{$field}", "name")
 function app:search-recipes($query as xs:string*, $field as xs:string*) {
-    <addresses>
+    <r:recipes>
     {
         if ($query != "") then
             switch ($field)
@@ -62,9 +62,9 @@ function app:search-recipes($query as xs:string*, $field as xs:string*) {
                  default return
                     collection($app:data)/r:recipe[ngram:contains(., $query)]
         else
-            collection($app:data)/address
+            collection($app:data)/r:recipe
     }
-    </addresses>
+    </r:recipes>
 };
 
 (:~
@@ -73,11 +73,12 @@ function app:search-recipes($query as xs:string*, $field as xs:string*) {
  :)
 declare
     %rest:PUT("{$content}")
-    %rest:path("/address")
+    %rest:path("/recipe")
 function app:create-or-edit-recipe($content as node()*) {
-    let $id := ($content/r:recipe/@id, util:uuid())[1]
+    let $id := ($content/r:recipe/r:id, util:uuid())[1]
     let $data :=
-        <r:recipe id="{$id}">
+        <r:recipe>
+            <r:id>{$id}</r:id>
         { $content/r:recipe/* }
         </r:recipe>
     let $log := util:log("DEBUG", "Storing data into " || $app:data)
@@ -92,7 +93,7 @@ function app:create-or-edit-recipe($content as node()*) {
 declare
     %rest:DELETE
     %rest:path("/recipe/{$id}")
-function app:delete-address($id as xs:string*) {
+function app:delete-recipe($id as xs:string*) {
     xmldb:remove($app:data, $id || ".xml"),
     app:all-recipes()
 };

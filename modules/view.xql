@@ -14,7 +14,39 @@ import module namespace templates="http://exist-db.org/xquery/templates" ;
 import module namespace config="http://localhost:8080/exist/apps/recipes/config" at "config.xqm";
 import module namespace app="http://localhost:8080/exist/apps/recipes/templates" at "app.xql";
 
+
+(:
+http://exist.2174344.n4.nabble.com/Confused-about-xform-betterform-usage-td4661167.html
+:)
+(:declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization";
+
+declare option output:method "html5";
+declare option output:media-type "text/html";:)
+
+(:
+http://localhost:8080/exist/apps/betterform/Status.xhtml
+
+acceptContentTypePattern
+
+application/xhtml\+html
+
+Based on this property, the XFormsFilter decide if should start XForms processing. Value can be 'all_xml' (WebFactory.ALL_XML_TYPES) to accept all xml content types or a reg expression to allow only certain ones.
+
+:)
+
+(: original (default) version :)
 declare option exist:serialize "method=html5 media-type=text/html enforce-xhtml=yes";
+
+(: returns nothing!! :)
+(:declare option exist:serialize "method=xhtml media-type=text/html indent=yes";:)
+
+(:
+DOES NOT WORK
+
+declare option exist:serialize "method=html5 media-type=application/xhtml+html";
+:)
+
+
 
 let $config := map {
     $templates:CONFIG_APP_ROOT := $config:app-root,

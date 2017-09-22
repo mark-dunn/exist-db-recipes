@@ -8,6 +8,7 @@ let $id := request:get-parameter('id', '')
 let $data-collection := '/db/apps/recipes/data/recipes'
 let $recipe := collection($data-collection)/r:recipe[r:id/text() = $id]
 
+
 let $resource := if ($new = 'true') 
     then 'save-new.xq' 
     else 'update.xq'
@@ -28,6 +29,9 @@ let $form :=
        <title>Edit Item</title>
        <link rel="stylesheet" type="text/css" href="../resources/css/style.css" />
        <style type="text/css">
+       <!-- xf: elements do not appear in web page
+       betterForms transforms these elements into HTML
+       -->
        <![CDATA[
        @namespace xf url("http://www.w3.org/2002/xforms");
 
@@ -58,6 +62,19 @@ let $form :=
        ]]>
        </style>
        <xf:model id="recipes-model">
+       
+       <!-- replace with version of "load" from examples/xforms/demo.html :
+       
+       <xf:submission id="load" resource="{$restxq}address" method="get" replace="instance">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Address list loaded.</xf:message>
+        </xf:submission>
+        
+        <xf:action ev:event="xforms-ready">
+            <xf:send submission="load"/>
+        </xf:action>
+       
+       -->
+       
            <xf:instance xmlns:r="http://ns.datacraft.co.uk/recipe" src="{$file}" id="this-recipe"/>
            
            
@@ -93,11 +110,13 @@ let $form :=
                 
                 <div class="dcContentBlock">
                 
-                                {if ($id) then
+                                {if ($id != '') then
                     <xf:output ref="@id" class="id">
                         <xf:label>ID:</xf:label>
                     </xf:output>
-                else ()}
+                else (
+                <p>NO ID!!</p>
+                )}
                 
                 <xf:input ref="/r:recipe/r:title" class="recipe-name">
                     <xf:label>Recipe Name:</xf:label>

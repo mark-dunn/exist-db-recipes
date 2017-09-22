@@ -18,6 +18,15 @@ if ($exist:path eq '') then
     
 else if ($exist:path eq "/") then
     (: forward root path to index.xql :)
+    (: add restxq parameter? 
+    
+    ?restxq={request:get-context-path()}/restxq/
+    
+    http://localhost:8080/exist/apps/doc/build/doc-0.4.8/devguide_rest.xml
+    
+    compare controller.xql in 
+    /db/apps/demo/examples/xforms/controller.xql
+    :)
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
         <redirect url="index.html"/>
     </dispatch>
