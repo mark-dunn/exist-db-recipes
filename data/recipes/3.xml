@@ -1,15 +1,13 @@
-<r:recipe xmlns:r="http://ns.datacraft.co.uk/recipe">
-    <r:id>3</r:id>
-    <r:title>Sausage and gravy</r:title>
-    <r:ingredients>
+<recipe>
+    <id>3</id>
+    <title>Sausage and gravy</title>
+    <ingredients>
+        <ingredient>sausage</ingredient>
+        <ingredient xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.net/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms">mash</ingredient>
+        <ingredient xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.net/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms">gravy</ingredient>
+        <ingredient xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.net/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms"/>
+    </ingredients>
+    <method>
         
-        <r:ingredient>sausage</r:ingredient>
-        <r:ingredient xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.net/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms">mash</r:ingredient>
-        <r:ingredient xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.net/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms">gravy</r:ingredient>
-        <r:ingredient xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.net/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms"/>
-        
-    </r:ingredients>
-    <r:method>
-        
-    </r:method>
-</r:recipe>
+    </method>
+</recipe>

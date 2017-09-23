@@ -1,32 +1,53 @@
-<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms" data-template="templates:surround" data-template-with="templates/page.html" data-template-at="content">
-    <!-- WHY ISN'T BETTERFORMS BEING LOADED?
-    
-    Does it just require a restart?
-    
-    http://localhost:8080/exist/apps/doc/build/doc-0.4.8/xforms.xml
-    
-    says
-    
-    To execute an XHTML/XForms document it is sufficient to store it into your database (using WebDAV or the admin client) and access it via the REST interface.
-    
-    http://localhost:8080/exist/apps/betterform/Status.xhtml
-
-acceptContentTypePattern
-
-application/xhtml\+html
-
-Based on this property, the XFormsFilter decide if should start XForms processing. Value can be 'all_xml' (WebFactory.ALL_XML_TYPES) to accept all xml content types or a reg expression to allow only certain ones.
-
-    -->
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms" data-template="templates:surround" data-template-with="templates/page.html" data-template-at="container-body" data-template-options="noscript=yes">
     <!-- 
     
     https://www.balisage.net/Proceedings/vol10/print/Niedl01/BalisageVol10-Niedl01.html
     
     -->
-    <!-- 
-    
-    According to eXist book (2015) it should just work  - anything on path /exist/apps gets automaticlly passed through betterForms
-    -->
+    <xf:model>
+        <xf:instance xmlns="" id="all">
+            <recipes/>
+        </xf:instance>
+        <xf:instance xmlns="" id="recipe-template">
+            <recipe>
+                <title/>
+                <ingredients>
+                    <ingredient/>
+                </ingredients>
+                <method>
+                    <step/>
+                </method>
+            </recipe>
+        </xf:instance>
+        <xf:instance xmlns="" id="search-instance">
+            <parameters>
+                <query/>
+                <field>ingredient</field>
+            </parameters>
+        </xf:instance>
+        <xf:bind id="recipe-id" nodeset="//recipe/id/text()" relevant="true()"/>
+        <xf:submission id="load" resource="/exist/restxq/recipes" method="get" replace="instance" instance="all">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Recipe list loaded.</xf:message>
+        </xf:submission>
+        <xf:submission id="save" resource="/exist/restxq/recipe" method="put" replace="instance" ref="//recipe[index('recipe-repeat')]">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Recipe saved.</xf:message>
+            <xf:message ev:event="xforms-submit-error" level="ephemeral">An error occurred.</xf:message>
+        </xf:submission>
+        <xf:submission id="delete" resource="/exist/restxq/recipe/{instance('all')//recipe[index('recipe-repeat')]/id/text()}" method="delete" replace="instance">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Recipe deleted.</xf:message>
+            <xf:message ev:event="xforms-submit-error" level="ephemeral">An error occurred.</xf:message>
+        </xf:submission>
+        <xf:submission id="search" resource="/exist/restxq/search" method="get" serialization="application/x-www-form-urlencoded" ref="instance('search-instance')" targetref="instance('all')" replace="instance"/>
+        <xf:action ev:event="xforms-ready">
+            <xf:message level="ephemeral">Loading recipe list...</xf:message>
+            <xf:send submission="load"/>
+        </xf:action>
+        <xf:action ev:event="xforms-submit-error">
+            <xf:message>Submit Error! Resource-uri: <xf:output value="event('resource-uri')"/>
+                Response-reason-phrase: <xf:output value="event('response-reason-phrase')"/>
+            </xf:message>
+        </xf:action>
+    </xf:model>
     <div class="row">
         <div class="col-md-8">
             <div class="page-header">
@@ -40,43 +61,6 @@ Based on this property, the XFormsFilter decide if should start XForms processin
                 <a data-template="templates:load-source" href="modules/app.xql">app.xql</a>.</p>
             </div>
             <div>
-                <xf:model xmlns:r="http://ns.datacraft.co.uk/recipe">
-<!--                    <xf:instance xmlns:r="http://ns.datacraft.co.uk/recipe" id="all"/>-->
-                    <!--<xf:instance id="template">
-                        <r:recipe>
-                            <r:ingredient/>
-                        </r:recipe>
-                    </xf:instance>
-                    -->
-                    <xf:instance xmlns="" id="search-instance">
-                        <parameters>
-                            <query/>
-                            <field>ingredient</field>
-                        </parameters>
-                    </xf:instance>
-                    <!-- 
-            $restxq contains the restxq endpoint, usually /exist/restxq on a default instance.
-            It is set as an URL parameter by the controller.
-            While it could be hardcoded, we want to make sure it always works if the context changes, e.g. to
-            /exist-test/restxq.
-        -->
-<!--                    <xf:bind id="recipe-id" nodeset="//r:recipe/r:id/text()" relevant="true()"/>-->
-                    <!--<xf:submission id="load" resource="{$restxq}recipes" method="get" replace="instance" instance="all">
-                        <xf:message ev:event="xforms-submit-done" level="ephemeral">Recipe list loaded.</xf:message>
-                    </xf:submission>-->
-                    <!--<xf:submission id="save" resource="{$restxq}recipe" method="put" replace="instance" ref="//r:recipe[index('recipe-repeat')]">
-                        <xf:message ev:event="xforms-submit-done" level="ephemeral">Recipe saved.</xf:message>
-                        <xf:message ev:event="xforms-submit-error" level="ephemeral">An error occurred.</xf:message>
-                    </xf:submission>
-                    <xf:submission id="delete" resource="{$restxq}recipe/{instance('all')//r:recipe[index('recipe-repeat')]/r:id}" method="delete" replace="instance">
-                        <xf:message ev:event="xforms-submit-done" level="ephemeral">Recipe deleted.</xf:message>
-                        <xf:message ev:event="xforms-submit-error" level="ephemeral">An error occurred.</xf:message>
-                    </xf:submission>
-                    <xf:submission id="search" resource="{$restxq}search" method="get" serialization="application/x-www-form-urlencoded" ref="instance('search')" targetref="instance('all')" replace="instance"/>-->
-                    <!--<xf:action ev:event="xforms-ready">
-                        <xf:send submission="load"/>
-                    </xf:action>-->
-                </xf:model>
                 <div class="row">
                     <div id="content" class="col-md-8">
                         <h2>Manage Recipes</h2>
@@ -88,6 +72,10 @@ Based on this property, the XFormsFilter decide if should start XForms processin
                                         <xf:item>
                                             <xf:label>Ingredient</xf:label>
                                             <xf:value>ingredient</xf:value>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Title</xf:label>
+                                            <xf:value>title</xf:value>
                                         </xf:item>
                                     </xf:select1>
                                 </td>
@@ -108,39 +96,39 @@ Based on this property, the XFormsFilter decide if should start XForms processin
                                 </td>
                             </tr>
                         </table>
-                        <!--<table class="recipes table">
+                        <table class="recipes table">
                             <thead>
                                 <tr>
-                                    <th>Ingredient</th>                                    
+                                    <th>Recipe</th>
                                 </tr>
                             </thead>
-                            <tbody id="recipe-repeat" xf:repeat-nodeset="instance('all')//r:recipe">
+                            <tbody id="recipe-repeat" xf:repeat-nodeset="instance('all')//recipe">
                                 <tr>
                                     <td>
-                                        <xf:output ref="r:title"/>
+                                        <xf:output ref="title"/>
                                     </td>
                                 </tr>
                             </tbody>
-                        </table>-->
-                       <!-- <xf:group appearance="minimal" class="action-buttons">
+                        </table>
+                        <xf:group appearance="minimal" class="action-buttons">
                             <xf:submit submission="delete">
                                 <xf:label>Delete</xf:label>
                             </xf:submit>
                             <xf:trigger>
                                 <xf:label>New</xf:label>
                                 <xf:action>
-                                    <xf:insert nodeset="//r:recipe" at="last()" position="after" origin="instance('template')"/>
+                                    <xf:insert nodeset="instance('all')//recipe" at="last()" position="after" origin="instance('recipe-template')"/>
                                 </xf:action>
                             </xf:trigger>
-                        </xf:group>-->
-                        <!--<xf:group ref="//r:recipe[index('recipe-repeat')]" appearance="full" class="edit">
-                            <xf:input ref="ingredient">
+                        </xf:group>
+                        <xf:group ref="instance('all')//recipe[index('recipe-repeat')]" appearance="full" class="edit">
+                            <xf:input ref="ingredients/ingredient">
                                 <xf:label>Ingredient:</xf:label>
                             </xf:input>
-                        </xf:group>-->
-                       <!-- <xf:submit submission="save">
+                        </xf:group>
+                        <xf:submit submission="save">
                             <xf:label>Save</xf:label>
-                        </xf:submit>-->
+                        </xf:submit>
                     </div>
                     <div class="col-md-4">
                         <div class="well">

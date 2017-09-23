@@ -24,13 +24,13 @@ declare
     %rest:path("/recipes")
     %rest:produces("application/xml", "text/xml")
 function app:all-recipes() {
-    <r:recipes>
+    <recipes>
     {
-        for $recipe in collection($config:app-root || "/data/recipes")/r:recipe
+        for $recipe in collection($app:data)/recipe
         return
             $recipe
     }
-    </r:recipes>
+    </recipes>
 };
 
 
@@ -41,11 +41,11 @@ declare
     %rest:GET
     %rest:path("/recipes/{$id}")
 function app:get-recipe($id as xs:string*) {
-    collection($app:data)/r:recipe[@id = $id]
+    collection($app:data)/recipe[id/text() = $id]
 };
 
 (:~
- : Search addresses using a given field and a (lucene) query string.
+ : Search recipes using a given field and a (lucene) query string.
  :)
 declare 
     %rest:GET
@@ -53,18 +53,20 @@ declare
     %rest:form-param("query", "{$query}", "")
     %rest:form-param("field", "{$field}", "name")
 function app:search-recipes($query as xs:string*, $field as xs:string*) {
-    <r:recipes>
+    <recipes>
     {
         if ($query != "") then
             switch ($field)
                 case "ingredient" return
-                    collection($app:data)/r:recipe[ngram:contains(r:ingredient, $query)]
-                 default return
-                    collection($app:data)/r:recipe[ngram:contains(., $query)]
+                    collection($app:data)/recipe[ngram:contains(ingredient, $query)]
+                case "title" return
+                    collection($app:data)/recipe[ngram:contains(title, $query)]
+                default return
+                    collection($app:data)/recipe[ngram:contains(., $query)]
         else
-            collection($app:data)/r:recipe
+            collection($app:data)/recipe
     }
-    </r:recipes>
+    </recipes>
 };
 
 (:~
@@ -75,12 +77,12 @@ declare
     %rest:PUT("{$content}")
     %rest:path("/recipe")
 function app:create-or-edit-recipe($content as node()*) {
-    let $id := ($content/r:recipe/r:id, util:uuid())[1]
+    let $id := ($content/recipe/id/text(), util:uuid())[1]
     let $data :=
-        <r:recipe>
-            <r:id>{$id}</r:id>
-        { $content/r:recipe/* }
-        </r:recipe>
+        <recipe>
+            <id>{$id}</id>
+        { $content/recipe/*[not(self::id)] }
+        </recipe>
     let $log := util:log("DEBUG", "Storing data into " || $app:data)
     let $stored := xmldb:store($app:data, $id || ".xml", $data)
     return

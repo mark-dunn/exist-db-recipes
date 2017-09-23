@@ -5,6 +5,8 @@ xquery version "3.0";
  : within a module.
  :)
 module namespace config="http://localhost:8080/exist/apps/recipes/config";
+(:module namespace config="http://exist-db.org/xquery/apps/config";:)
+
 
 declare namespace templates="http://exist-db.org/xquery/templates";
 

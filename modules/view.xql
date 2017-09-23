@@ -64,6 +64,24 @@ let $lookup := function($functionName as xs:string, $arity as xs:int) {
     } catch * {
         ()
     }
+    
+    
+    (: using this version instead reveals that the function {$restxq}/recipes can't be found 
+    
+    error:
+    
+    exerr:ERROR Type mismatch: the actual type of parameter 4 does not match the type declared in the signature of function: templates:call-by-introspection($node as element(), $parameters as map, $model as map, $fn as function) item()*. Required type: function, got element(). [at line 188, column 74, source: C:\Mark\Website\eXist-db\webapp\WEB-INF\data\expathrepo\shared-0.4.0\content\templates.xql]
+In function:
+	templates:call-by-introspection(element(), map, map, function) [187:28:C:\Mark\Website\eXist-db\webapp\WEB-INF\data\expathrepo\shared-0.4.0\content\templates.xql]
+	templates:call(item(), element(), map) [143:37:C:\Mark\Website\eXist-db\webapp\WEB-INF\data\expathrepo\shared-0.4.0\content\templates.xql]
+	templates:process(node()*, map) [131:51:C:\Mark\Website\eXist-db\webapp\WEB-INF\data\expathrepo\shared-0.4.0\content\templates.xql]
+	templates:process(node()*, map) [88:9:C:\Mark\Website\eXist-db\webapp\WEB-INF\data\expathrepo\shared-0.4.0\content\templates.xql]
+	templates:apply(node()+, function, map?, map?) [78:5:C:\Mark\Website\eXist-db\webapp\WEB-INF\data\expathrepo\shared-0.4.0\content\templates.xql]
+    
+    :)
+    (:let $f := fn:function-lookup(xs:QName($functionName), $arity )
+    return if (exists($f)) then $f 
+    else (<error>ERROR: can't find {$functionName}</error>) :)
 }
 (:
  : The HTML is passed in the request from the controller.

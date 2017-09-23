@@ -7,8 +7,8 @@ import module namespace app="http://localhost:8080/exist/apps/recipes/templates"
 
 declare variable $exist:path external;
 declare variable $exist:resource external;
-declare variable $exist:controller external;
-declare variable $exist:prefix external;
+declare variable $exist:controller external; (: '/recipes' :)
+declare variable $exist:prefix external; (: '/apps' :)
 declare variable $exist:root external;
 
 if ($exist:path eq '') then
