@@ -24,13 +24,11 @@ declare
     %rest:path("/recipes")
     %rest:produces("application/xml", "text/xml")
 function app:all-recipes() {
-    <recipes>
+    <r:recipes>
     {
-        for $recipe in collection($app:data)/recipe
-        return
-            $recipe
+        collection($app:data)/r:recipe
     }
-    </recipes>
+    </r:recipes>
 };
 
 
@@ -41,7 +39,7 @@ declare
     %rest:GET
     %rest:path("/recipes/{$id}")
 function app:get-recipe($id as xs:string*) {
-    collection($app:data)/recipe[id/text() = $id]
+    collection($app:data)/r:recipe[r:id/text() = $id]
 };
 
 (:~
@@ -49,24 +47,30 @@ function app:get-recipe($id as xs:string*) {
  :)
 declare 
     %rest:GET
-    %rest:path("/search")
+    %rest:path("/search-recipes")
     %rest:form-param("query", "{$query}", "")
-    %rest:form-param("field", "{$field}", "name")
+    %rest:form-param("field", "{$field}", "ingredient")
 function app:search-recipes($query as xs:string*, $field as xs:string*) {
-    <recipes>
+    let $log := util:log("DEBUG", "Searching for '" || $query || "' in field '" || $field || "'" )
+    return
+    <r:recipes>
     {
         if ($query != "") then
+
             switch ($field)
                 case "ingredient" return
-                    collection($app:data)/recipe[ngram:contains(ingredient, $query)]
+(:                    collection($app:data)/r:recipe[ft:query(descendant::r:ingredient, $query)]:)
+                    collection($app:data)/r:recipe[ngram:contains(descendant::r:ingredient, $query)]
                 case "title" return
-                    collection($app:data)/recipe[ngram:contains(title, $query)]
+(:                    collection($app:data)/r:recipe[ft:query(r:title, $query)]:)
+                    collection($app:data)/r:recipe[ngram:contains(r:title, $query)]
                 default return
-                    collection($app:data)/recipe[ngram:contains(., $query)]
+(:                    collection($app:data)/r:recipe[ft:query(descendant::*, $query)]:)
+                    collection($app:data)/r:recipe[ngram:contains(descendant::*, $query)]
         else
-            collection($app:data)/recipe
+            collection($app:data)/r:recipe
     }
-    </recipes>
+    </r:recipes>
 };
 
 (:~
@@ -77,12 +81,12 @@ declare
     %rest:PUT("{$content}")
     %rest:path("/recipe")
 function app:create-or-edit-recipe($content as node()*) {
-    let $id := ($content/recipe/id/text(), util:uuid())[1]
+    let $id := ($content/r:recipe/r:id/text(), util:uuid())[1]
     let $data :=
-        <recipe>
-            <id>{$id}</id>
-        { $content/recipe/*[not(self::id)] }
-        </recipe>
+        <r:recipe>
+            <r:id>{$id}</r:id>
+        { $content/r:recipe/*[not(self::r:id)] }
+        </r:recipe>
     let $log := util:log("DEBUG", "Storing data into " || $app:data)
     let $stored := xmldb:store($app:data, $id || ".xml", $data)
     return
@@ -101,6 +105,49 @@ function app:delete-recipe($id as xs:string*) {
 };
 
 
+(:~
+ : Reindex the recipe collection
+ :)
+declare
+    %rest:GET
+    %rest:path("/reindex-recipes")
+    %rest:produces("application/xml", "text/xml")
+function app:reindex-recipes() {
+    let $login := xmldb:login($app:data, 'admin', '0verc00k')
+    return 
+    <reindex-status>
+    {
+        xmldb:reindex($app:data)
+    }
+    </reindex-status>
+};
+
+
+
+(:~
+ : List resource functions from the restxq.registry
+ :)
+declare
+    %rest:GET
+    %rest:path("/restxq-functions")
+    %rest:produces("application/xml", "text/xml")
+function app:debug-restxq-registry() {
+    rest:resource-functions()
+};
+
+(:~
+ : get namespace URI
+ 
+ DOESN'T WORK, name() and namespace-uri() return nothing
+ :)
+(:declare
+    %rest:PUT("{$field}")
+    %rest:path("/get-namespace")
+function app:debug-get-namespace($field as node()*) {
+        let $log := util:log("DEBUG", "Namespace of " || $field/name() || " is " || $field/namespace-uri() )
+        return ()
+};
+:)
 
 (:~
  : This is a sample templating function. It will be called by the templating module if
