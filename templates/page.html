@@ -1,9 +1,9 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:r="http://ns.datacraft.co.uk/recipe">
+<html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <!-- meta Content-Type added to see if betterForms needs it 
         Seems to make no difference
         -->
-<!--        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />-->
+        <!--        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />-->
         <title data-template="config:app-title">App Title</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <meta data-template="config:app-meta"/>
@@ -13,6 +13,18 @@
         <script type="text/javascript" src="$shared/resources/scripts/jquery/jquery-1.7.1.min.js"/>
         <script type="text/javascript" src="$shared/resources/scripts/loadsource.js"/>
         <script type="text/javascript" src="$shared/resources/scripts/bootstrap-3.0.3.min.js"/>
+        
+        <script src="resources/Saxon-JS-1.1.0/SaxonJS.js"/>
+        
+        <script>
+      window.onload = function() {
+        SaxonJS.transform({
+           "stylesheetLocation":"resources/sef/saxon-xforms.sef.xml",
+           "sourceLocation":"recipeForm-simple.xml",
+           "stylesheetParams": {"xforms-file":"../../recipeForm-simple.xml"}
+           })
+      }     
+      </script>
     </head>
     <body id="body">
         <nav class="navbar navbar-default" role="navigation">

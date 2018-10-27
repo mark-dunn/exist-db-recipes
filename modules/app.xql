@@ -59,14 +59,15 @@ function app:search-recipes($query as xs:string*, $field as xs:string*) {
 
             switch ($field)
                 case "ingredient" return
-(:                    collection($app:data)/r:recipe[ft:query(descendant::r:ingredient, $query)]:)
-                    collection($app:data)/r:recipe[ngram:contains(descendant::r:ingredient, $query)]
+(:                    collection($app:data)/r:recipe[ descendant::r:ingredient[ft:query(., $query)] ] :)
+                    collection($app:data)/r:recipe[ngram:contains(descendant::r:ingredient, $query)] 
+
                 case "title" return
 (:                    collection($app:data)/r:recipe[ft:query(r:title, $query)]:)
                     collection($app:data)/r:recipe[ngram:contains(r:title, $query)]
                 default return
 (:                    collection($app:data)/r:recipe[ft:query(descendant::*, $query)]:)
-                    collection($app:data)/r:recipe[ngram:contains(descendant::*, $query)]
+                    collection($app:data)/r:recipe[ngram:contains(descendant::*, $query)] 
         else
             collection($app:data)/r:recipe
     }
