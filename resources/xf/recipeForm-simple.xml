@@ -1,4 +1,13 @@
-<xf:xform xmlns:rest="http://exquery.org/ns/restxq" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xf:xform xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:rest="http://exquery.org/ns/restxq" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:r="http://ns.datacraft.co.uk/recipe" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms">
+    
+    <!-- 
+    
+    weird behaviours in eXist 3.0
+    
+    1. this file was not read properly unless xmlns:r was declared on the root element!
+    2. xforms namespace prefix must be bound (not just xf)
+    
+    -->
     <!-- 
     
     Have to use *: in XPaths. For some reason namespace declaration is not retained by betterForms
@@ -8,7 +17,7 @@
     -->
     <xf:model id="m-recipes">
         <xf:instance id="all">
-            <r:recipes xmlns:r="http://ns.datacraft.co.uk/recipe">
+            <r:recipes>
                 <r:recipe>
                     <r:id>2</r:id>
                     <r:title>Orange and ginger chicken</r:title>

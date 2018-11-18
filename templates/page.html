@@ -16,12 +16,21 @@
         
         <script src="resources/Saxon-JS-1.1.0/SaxonJS.js"/>
         
-        <script>
+ <!--       <script>
       window.onload = function() {
         SaxonJS.transform({
            "stylesheetLocation":"resources/sef/saxon-xforms.sef.xml",
-           "sourceLocation":"recipeForm-simple.xml",
-           "stylesheetParams": {"xforms-file":"../../recipeForm-simple.xml"}
+           "initialTemplate":"xformsjs-main"
+           })
+      }     
+      </script>-->
+        
+        <script>
+      window.onload = function() {
+        SaxonJS.transform({
+           "stylesheetLocation":  "resources/sef/saxon-xforms.sef.xml",
+           "sourceLocation":      "resources/xf/recipeForm-simple.xml",
+           "stylesheetParams":    {"xforms-file":   "../xf/recipeForm-simple.xml"}
            })
       }     
       </script>
