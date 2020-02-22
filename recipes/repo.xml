@@ -1,0 +1,13 @@
+<meta xmlns="http://exist-db.org/xquery/repo">
+    <description>Searchable collection of recipes</description>
+    <author>Mark Dunn</author>
+    <website/>
+    <status>alpha</status>
+    <license>GNU-LGPL</license>
+    <copyright>true</copyright>
+    <type>application</type>
+    <target>recipes</target>
+    <prepare>pre-install.xql</prepare>
+    <finish/>
+    <deployed>2017-07-14T14:13:49.209+01:00</deployed>
+</meta>

@@ -1,0 +1,11 @@
+<r:recipe xmlns:r="http://ns.datacraft.co.uk/recipe">
+    <r:id>4</r:id>
+    <r:title>Broccoli pasta</r:title>
+    <r:ingredients>
+        <r:ingredient>Broccoli</r:ingredient>
+        <r:ingredient xmlns="http://www.w3.org/1999/xhtml" xmlns:bf="http://betterform.sourceforge.net/xforms" xmlns:xf="http://www.w3.org/2002/xforms">pasta</r:ingredient>
+    </r:ingredients>
+    <r:method>
+        <r:step/>
+    </r:method>
+</r:recipe>

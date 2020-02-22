@@ -1,0 +1,10 @@
+<r:recipe xmlns:r="http://ns.datacraft.co.uk/recipe">
+    <r:id>REPLACE_ME</r:id>
+    <r:title/>
+    <r:ingredients>
+        <r:ingredient/>
+    </r:ingredients>
+    <r:method>
+        <r:step/>
+    </r:method>
+</r:recipe>
