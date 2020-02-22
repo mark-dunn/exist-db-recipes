@@ -1,4 +1,4 @@
-<xf:xform xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:rest="http://exquery.org/ns/restxq" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:r="http://ns.datacraft.co.uk/recipe" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms">
+<xf:xform xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:rest="http://exquery.org/ns/restxq" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:r="http://ns.datacraft.co.uk/recipe" xmlns:xs="http://www.w3.org/2001/XMLSchema">
     
     <!-- 
     
@@ -53,7 +53,7 @@
         
         <xf:submission id="load" resource="/exist/restxq/recipes" method="get" replace="instance" instance="all"/>
             
-        <!-- confusion with previously registered REXTXQ resource "/search" in demop app !!! 
+        <!-- confusion with previously registered RESTXQ resource "/search" in demo app !!! 
         changed to "/search-recipes"
         -->
         <xf:submission id="search" resource="/exist/restxq/search-recipes" ref="instance('i-search-recipes')" instance="all" replace="instance" method="get" serialization="application/x-www-form-urlencoded"/> 
@@ -62,7 +62,8 @@
             <xf:message ev:event="xforms-submit-done" level="ephemeral">Recipe collection reindexed.</xf:message>
         </xf:submission>
         
-      
+        <xf:submission id="save" resource="/exist/restxq/recipe" method="put" mediatype="application/xml" ref="instance('all')/r:recipe[index('recipe-repeat')]"/>
+        
     </xf:model>
     
     
@@ -181,7 +182,13 @@
                     <xf:setfocus control="edit-ingredient-repeat-input"/>
                 </xf:action>
             </xf:trigger>
+            
         </xf:group>
+        
+        <!-- inside <xf:group> it got hit by "refreshElementsUsingIndexFunction-JS" and the @data-submit attribute was lost -->
+        <xf:submit submission="save">
+            <xf:label>Save recipe</xf:label>
+        </xf:submit>
         
         
         
