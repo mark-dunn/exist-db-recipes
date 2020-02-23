@@ -1,1 +1,8 @@
-<r:recipe xmlns:r="http://ns.datacraft.co.uk/recipe"><r:id>2</r:id><r:title xmlns:xforms="http://www.w3.org/2002/xforms">Orange and ginger chicken</r:title><r:ingredients xmlns:xforms="http://www.w3.org/2002/xforms"><r:ingredient>chickens</r:ingredient><r:ingredient>ginger</r:ingredient><r:ingredient>orange</r:ingredient></r:ingredients><r:method xmlns:xforms="http://www.w3.org/2002/xforms"><r:step>cook</r:step><r:step>cook more</r:step></r:method></r:recipe>
+<r:recipe xmlns:r="http://ns.datacraft.co.uk/recipe"><r:id>2</r:id><r:title xmlns:xforms="http://www.w3.org/2002/xforms">Orange and ginger chicken</r:title><r:ingredients xmlns:xforms="http://www.w3.org/2002/xforms">
+            <r:ingredient>chicken</r:ingredient>
+            <r:ingredient>ginger</r:ingredient>
+            <r:ingredient>orange</r:ingredient>
+        </r:ingredients><r:method xmlns:xforms="http://www.w3.org/2002/xforms">
+            <r:step>cook</r:step>
+            <r:step>cook more</r:step>
+        </r:method></r:recipe>

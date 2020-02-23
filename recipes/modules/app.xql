@@ -31,6 +31,27 @@ function app:all-recipes() {
     </r:recipes>
 };
 
+(:~
+ : Clear recipes.
+ :)
+declare
+    %rest:GET
+    %rest:path("/clear")
+    %rest:produces("application/xml", "text/xml")
+function app:clear-recipes() {
+    <r:recipes xmlns:xforms="http://www.w3.org/2002/xforms">
+        <r:recipe>
+             <r:title/>
+             <r:ingredients>
+                <r:ingredient/>
+             </r:ingredients>
+             <r:method>
+               <r:step/>
+             </r:method>
+        </r:recipe>
+    </r:recipes>
+};
+
 
 (:~
  : Retrieve a recipe identified by uuid.
@@ -96,7 +117,7 @@ function app:create-or-edit-recipe($content as node()*) {
 
 (:~
  : Delete an address identified by its uuid.
- :)
+ 
 declare
     %rest:DELETE
     %rest:path("/recipe/{$id}")
@@ -104,7 +125,18 @@ function app:delete-recipe($id as xs:string*) {
     xmldb:remove($app:data, $id || ".xml"),
     app:all-recipes()
 };
+:)
 
+(:~
+ : Delete an address identified by its uuid.
+ :)
+declare
+    %rest:PUT
+    %rest:path("/delete-recipe")
+function app:delete-recipe($id as xs:string*) {
+    xmldb:remove($app:data, $id || ".xml")
+    
+};
 
 (:~
  : Reindex the recipe collection

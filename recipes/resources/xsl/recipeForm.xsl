@@ -1,4 +1,4 @@
-<xsl:transform xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:f="http://www.saxonica.com/local/functions" xmlns:js="http://saxonica.com/ns/globalJS" xmlns:saxon="http://saxon.sf.net/" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:array="http://www.w3.org/2005/xpath-functions/array" xmlns:ixsl="http://saxonica.com/ns/interactiveXSLT" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:map="http://www.w3.org/2005/xpath-functions/map" exclude-result-prefixes="#all" extension-element-prefixes="ixsl" version="3.0">
+<xsl:transform xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:array="http://www.w3.org/2005/xpath-functions/array" xmlns:f="http://www.saxonica.com/local/functions" xmlns:js="http://saxonica.com/ns/globalJS" xmlns:ixsl="http://saxonica.com/ns/interactiveXSLT" xmlns:saxon="http://saxon.sf.net/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:map="http://www.w3.org/2005/xpath-functions/map" exclude-result-prefixes="#all" extension-element-prefixes="ixsl" version="3.0">
     
     <xsl:import href="../src/saxon-xforms.xsl"/>
 
