@@ -118,24 +118,34 @@ function app:create-or-edit-recipe($content as node()*) {
 (:~
  : Delete an address identified by its uuid.
  
+ : according to Saxon-JS documentation, response body is either a document node, or text
+ : https://www.saxonica.com/saxon-js/documentation/index.html#!development/http
+ : BUT possible bug
+ : if anything other than XSML is returned we get an error 
+ : 405 HTTP method GET is not supported by this URL
+ :)
 declare
     %rest:DELETE
-    %rest:path("/recipe/{$id}")
-function app:delete-recipe($id as xs:string*) {
-    xmldb:remove($app:data, $id || ".xml"),
-    app:all-recipes()
+    %rest:path("/delete/{$id}")
+function app:delete-recipe-no-param($id as xs:string*) {
+    let $deleted := xmldb:remove($app:data, $id || ".xml")
+    return <deleted/>
 };
-:)
+
 
 (:~
  : Delete an address identified by its uuid.
+ 
+ : for some reason does not work with DELETE method!
+ : Perhaps should not use form parameters?
  :)
 declare
-    %rest:PUT
+    %rest:GET
     %rest:path("/delete-recipe")
+    %rest:form-param("id", "{$id}", "")
 function app:delete-recipe($id as xs:string*) {
-    xmldb:remove($app:data, $id || ".xml")
-    
+    let $deleted := xmldb:remove($app:data, $id || ".xml")
+    return <deleted/>
 };
 
 (:~
