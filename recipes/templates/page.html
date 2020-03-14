@@ -30,13 +30,16 @@
         SaxonJS.transform({
            "stylesheetLocation":  "resources/sef/saxon-xforms.sef.xml",
            "sourceLocation":      "resources/xf/recipeForm.xml",
-           "stylesheetParams":    {"xforms-file":   "../xf/recipeForm.xml"}
+           "stylesheetParams":    {
+                "xforms-file":   "../xf/recipeForm.xml",
+                "LOGLEVEL": 40
+                }
            })
       }     
       </script>
     </head>
     <body id="body">
-        <nav class="navbar navbar-default" role="navigation">
+        <!--<nav class="navbar navbar-default" role="navigation">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
@@ -58,7 +61,7 @@
                     </li>
                 </ul>
             </div>
-        </nav>
+        </nav>-->
         <div id="container-body" class="container"/>
         <footer>
             <a class="poweredby" href="http://exist-db.org">

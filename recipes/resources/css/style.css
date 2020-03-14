@@ -6,14 +6,28 @@ body {
     padding: 0  !important;
 }
 
-/* Page title */
-h1 {
-    border-bottom: 1px solid #800000;
+/*  Box contaioning page title
+ * 
+ * (overriding bootstrap CSS in some cases)
+ *  */
+.page-header {
+    border-bottom: 1px solid #800000 !important;
     color: #800000;
     background-color: #E6D9A6;
-    margin: 0;
+    margin: 0 -15px 1em -15px;
     padding: 0.5em 1em 0.5em 2em;
+}
+
+/* Recipe title */
+.recipe-title {
+   margin-top:  0.5em;
+   font-weight: bold;
     
+} 
+
+/*  Ingredients */
+.recipe-ingredient {
+    margin-left: 2em;
 }
 
 div.dcContentBlock {
@@ -21,12 +35,39 @@ div.dcContentBlock {
     margin-top: 1em;
 }
 
+span.selected {
+    background-color: #e4eef0;
+}
+
+
+.message-error {
+    background-color: #ffcccc;
+    border: 2px solid #ff0000;
+    color: #000000;   
+    padding: 0.5em;
+}
+
+.message-warning {
+    background-color: #ffe0b3;
+    border: 2px solid #cc7a00;
+    color: #000000;   
+    padding: 0.5em;
+}
+.message-info {
+    background-color: #ccffcc;
+    color: #000000;   
+    padding: 0.5em;
+}
+
+
 /*  override styles for betterForm */
 
 /* .xfRepeatIndex is the selected item in the form */
 .xfRepeatIndex {
     background-color: #E6D9A6;
 }
+
+
 
 /* Application styles could go here */
 footer .poweredby { float: right; margin: 33px 10px 0 0;}
