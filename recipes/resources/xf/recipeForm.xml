@@ -1,4 +1,4 @@
-<xf:xform xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:rest="http://exquery.org/ns/restxq" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:r="http://ns.datacraft.co.uk/recipe" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xf:xform xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:rest="http://exquery.org/ns/restxq" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:r="http://ns.datacraft.co.uk/recipe" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms">
     
     <!-- 
     
@@ -68,7 +68,11 @@
         </xf:instance>
         
         
-        <xf:submission id="load" resource="/exist/restxq/recipes" method="get" replace="instance" instance="all"/>
+        <xf:submission id="load" resource="/exist/restxq/recipes" method="get" replace="instance" instance="all">
+            <xf:action ev:event="xforms-submit-done">
+                <xf:refresh/>
+            </xf:action>
+        </xf:submission>
             
         <xf:submission id="clear" resource="/exist/restxq/clear" method="get" replace="instance" instance="all"/>
         
@@ -82,7 +86,11 @@
         <!-- confusion with previously registered RESTXQ resource "/search" in demo app !!! 
         changed to "/search-recipes"
         -->
-        <xf:submission id="search" resource="/exist/restxq/search-recipes" ref="instance('i-search-recipes')" instance="all" replace="instance" method="get" serialization="application/x-www-form-urlencoded"/> 
+        <xf:submission id="search" resource="/exist/restxq/search-recipes" ref="instance('i-search-recipes')" instance="all" replace="instance" method="get" serialization="application/x-www-form-urlencoded">
+            <xf:action ev:event="xforms-submit-done">
+                <xf:refresh/>
+            </xf:action>
+        </xf:submission> 
         
         <xf:submission id="reindex" resource="/exist/restxq/reindex-recipes" method="get" ref="instance('i-reindex-status')" instance="i-reindex-status">
             <xf:message ev:event="xforms-submit-done" level="ephemeral">Recipe collection reindexed.</xf:message>
@@ -120,19 +128,25 @@
         </xf:submit>
         
         <xf:group appearance="minimal" class="action-buttons">
-            <xf:submit submission="load">
+            <xf:trigger>
                 <xf:label>Load</xf:label>
-            </xf:submit>
+                <xf:action ev:event="DOMActivate">
+                    <xf:send submission="load"/>
+                    
+                </xf:action>
+            </xf:trigger>
+            
+            
             <xf:submit submission="reindex">
                 <xf:label>Reindex</xf:label>
             </xf:submit>
             
-            <xf:trigger>
+            <!--<xf:trigger>
                 <xf:label>Rebuild</xf:label>
                 <xf:action ev:event="DOMActivate">
                     <xf:rebuild model="m-recipes"/>
                 </xf:action>
-            </xf:trigger>
+            </xf:trigger>-->
         </xf:group>
         
        
