@@ -57,6 +57,7 @@
         <!-- empty recipe -->
         <xf:instance id="i-new-recipe">
             <r:recipe>
+                <r:id/>
                 <r:title/>
                 <r:ingredients>
                     <r:ingredient/>
@@ -68,19 +69,25 @@
         </xf:instance>
         
         
+        <xf:bind id="has-title" nodeset="instance('all')/r:recipe[1]/r:title" relevant="text() != ''"/>
+        
         <xf:submission id="load" resource="/exist/restxq/recipes" method="get" replace="instance" instance="all">
             <xf:action ev:event="xforms-submit-done">
                 <xf:refresh/>
             </xf:action>
         </xf:submission>
             
-        <xf:submission id="clear" resource="/exist/restxq/clear" method="get" replace="instance" instance="all"/>
+        <xf:submission id="clear" resource="/exist/restxq/clear" method="get" replace="instance" instance="all">
+            <xf:action ev:event="xforms-submit-done">
+                <xf:refresh/>
+            </xf:action>
+        </xf:submission>
         
         <!-- must submit an element, to be turned into a KEV query (name = text content) -->
         <!-- for some reason does not work with DELETE method -->
-<!--        <xf:submission id="delete-recipe" resource="/exist/restxq/delete-recipe" method="get" serialization="application/x-www-form-urlencoded" instance="all" ref="instance('all')/r:recipe[index('recipe-repeat')]/r:id"/>-->
+        <xf:submission id="delete-recipe" resource="/exist/restxq/delete-recipe" method="put" instance="all" ref="instance('all')/r:recipe[index('recipe-repeat')]/r:id"/>
         
-        <xf:submission id="delete-recipe" resource="/exist/restxq/delete" method="delete" instance="all" ref="instance('all')/r:recipe[index('recipe-repeat')]/r:id/text()"/>
+<!--        <xf:submission id="delete-recipe" resource="/exist/restxq/delete" method="get" instance="all" ref="instance('all')/r:recipe[index('recipe-repeat')]/r:id/text()"/>-->
 
 
         <!-- confusion with previously registered RESTXQ resource "/search" in demo app !!! 
@@ -97,12 +104,31 @@
         </xf:submission>
         
         <xf:submission id="save" resource="/exist/restxq/recipe" method="put" mediatype="application/xml" instance="all" ref="instance('all')/r:recipe[index('recipe-repeat')]"/>
-        
+        <xf:submission id="get-id" resource="/exist/restxq/get-id" method="put" mediatype="application/xml" instance="all" ref="instance('all')/r:recipe[index('recipe-repeat')]/r:id" targetref="instance('all')/r:recipe[index('recipe-repeat')]/r:id" replace="text">
+            <xf:send ev:event="xforms-submit-done" submission="save"/>
+        </xf:submission>        
     </xf:model>
     
     
-    <div id="content">
+    <div id="content" class="dcContentBlock">
         <h2>Manage Recipes</h2>
+        
+        <!-- 
+            Request gives "strict-origin-when-cross-origin" error
+            change setting in Jetty to try to fix it
+            
+            https://www.w3.org/wiki/CORS_Enabled#For_Jetty_.287_and_above.29
+            
+            Setting in file:/C:/eXist-db/etc/standalone-webapp/WEB-INF/web.xml
+            jetty-servlets jar file placeed in file:/C:/eXist-db/lib/user/
+        -->
+        <xf:trigger>
+            <xf:label>Get recipe ID (test)</xf:label>
+            <xf:action ev:event="DOMActivate">
+                <xf:send submission="get-id"/>
+                <!--<xf:message level="ephemeral">Recipe ID returned: <xf:output ref="instance('all')/r:recipe[index('recipe-repeat')]/r:id/text()"/></xf:message>-->
+            </xf:action>
+        </xf:trigger>
         
         <xf:select1 ref="instance('i-search-recipes')/field">
             <xf:label>Choose field:</xf:label>
@@ -129,7 +155,7 @@
         
         <xf:group appearance="minimal" class="action-buttons">
             <xf:trigger>
-                <xf:label>Load</xf:label>
+                <xf:label>Load all recipes</xf:label>
                 <xf:action ev:event="DOMActivate">
                     <xf:send submission="load"/>
                     
@@ -156,7 +182,12 @@
         <!-- https://www.w3.org/TR/xforms11/#ui-repeat -->
         <xf:repeat id="recipe-repeat" nodeset="instance('all')/r:recipe">
             <xf:output ref="r:title" class="recipe-title"/>
+            <xf:output bind="has-title" value="'Ingredients:'" class="recipe-subheading"/>
             <xf:repeat id="ingredient-repeat" nodeset="r:ingredients/r:ingredient">
+                <xf:output ref="text()" class="recipe-ingredient"/>
+            </xf:repeat>
+        <xf:output bind="has-title" value="'Method:'" class="recipe-subheading"/>
+            <xf:repeat id="method-repeat" nodeset="r:method/r:step">
                 <xf:output ref="text()" class="recipe-ingredient"/>
             </xf:repeat>
         </xf:repeat>  
@@ -171,6 +202,13 @@
                 <xf:send submission="clear"/>
             </xf:action>
         </xf:trigger>
+        
+        
+        <!-- inside <xf:group> it got hit by "refreshElementsUsingIndexFunction-JS" and the @data-submit attribute was lost -->
+        <xf:submit submission="get-id">
+            <xf:label>Save recipe</xf:label>
+        </xf:submit>
+        
         
         <xf:trigger>
         <xf:label>Delete recipe</xf:label>
@@ -189,6 +227,13 @@
                 </xf:input>
             </xf:repeat>
             
+            
+            <!-- http://wiki.orbeon.com/forms/how-to/logic/repeat-insert-position -->
+            <xf:repeat id="edit-step-repeat" nodeset="r:method/r:step">
+                <xf:input ref="." id="edit-step-repeat-input">
+                    <xf:label>Step:</xf:label>
+                </xf:input>
+            </xf:repeat>
             
             <!-- http://wiki.orbeon.com/forms/how-to/logic/repeat-insert-position -->
             <xf:trigger>
@@ -241,15 +286,46 @@
                 </xf:action>
             </xf:trigger>
             
+        <xf:trigger>
+                <xf:label>Add step after selected item</xf:label>
+                <xf:action ev:event="DOMActivate">
+                    <xf:insert context="." nodeset="r:method/r:step" at="index('edit-step-repeat')" position="after" origin="instance('i-new-step')"/>
+                    <xf:setfocus control="edit-step-repeat-input"/>
+                </xf:action>
+            </xf:trigger>
+            
+            <xf:trigger>
+                <xf:label>Delete selected step</xf:label>
+                <xf:action ev:event="DOMActivate">
+                    <xf:delete context="." nodeset="r:method/r:step" at="index('edit-step-repeat')"/>
+                    <xf:setindex repeat="edit-step-repeat" index="index('edit-ingredient-repeat') - 1" if="index('edit-step-repeat') != 1"/>
+                    <xf:insert context="./r:method" if="not(r:step)" nodeset="r:step" origin="instance('i-new-step')"/>
+                    <xf:setfocus control="edit-step-repeat-input"/>
+                </xf:action>
+            </xf:trigger>
+            
+            
+            
+            <xf:trigger>
+                <xf:label>Move selected step Up</xf:label>
+                <xf:action ev:event="DOMActivate" if="index('edit-step-repeat') != 1">
+                    <xf:insert context="." nodeset="r:method/r:step" at="index('edit-step-repeat') - 1" position="before" origin="r:method/r:step[index('edit-step-repeat')]"/>
+                    <xf:delete context="." nodeset="r:method/r:step" at="index('edit-step-repeat') + 2"/>
+                    <xf:setfocus control="edit-step-repeat-input"/>
+                </xf:action>
+            </xf:trigger>
+            
+            <xf:trigger>
+                <xf:label>Move selected step Down</xf:label>
+                <xf:action ev:event="DOMActivate" if="index('edit-step-repeat') != count(r:ingredients/r:ingredient)">
+                    <xf:insert context="." nodeset="r:method/r:step" at="index('edit-step-repeat') + 1" position="after" origin="r:method/r:step[index('edit-step-repeat')]"/>
+                    <xf:delete context="." nodeset="r:method/r:step" at="index('edit-step-repeat') - 2"/>
+                    <xf:setindex repeat="edit-step-repeat" index="index('edit-step-repeat') - 1"/>
+                    <xf:setfocus control="edit-step-repeat-input"/>
+                </xf:action>
+            </xf:trigger>
         </xf:group>
         
-        <!-- inside <xf:group> it got hit by "refreshElementsUsingIndexFunction-JS" and the @data-submit attribute was lost -->
-        <xf:submit submission="save">
-            <xf:label>Save recipe</xf:label>
-        </xf:submit>
-        
-        
-        
-   </div>
+        </div>
     
 </xf:xform>

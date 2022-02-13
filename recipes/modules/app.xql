@@ -6,7 +6,7 @@ module namespace app="http://localhost:8080/exist/apps/recipes/templates";
 import module namespace xrest="http://exquery.org/ns/restxq/exist" at "java:org.exist.extensions.exquery.restxq.impl.xquery.exist.ExistRestXqModule";
 
 
-import module namespace templates="http://exist-db.org/xquery/templates" ;
+(:import module namespace templates="http://exist-db.org/xquery/templates" ;:)
 import module namespace config="http://localhost:8080/exist/apps/recipes/config" at "config.xqm";
 
 declare namespace rest="http://exquery.org/ns/restxq";
@@ -14,6 +14,9 @@ declare namespace output="http://www.w3.org/2010/xslt-xquery-serialization";
 declare namespace r="http://ns.datacraft.co.uk/recipe";
 
 declare variable $app:data := $config:app-root || "/data/recipes";
+declare variable $app:u := "admin";
+declare variable $app:p := "###REPLACE###";
+
 
 
 (:~
@@ -41,6 +44,7 @@ declare
 function app:clear-recipes() {
     <r:recipes xmlns:xforms="http://www.w3.org/2002/xforms">
         <r:recipe>
+            <r:id/>
              <r:title/>
              <r:ingredients>
                 <r:ingredient/>
@@ -102,7 +106,7 @@ function app:search-recipes($query as xs:string*, $field as xs:string*) {
 declare
     %rest:PUT("{$content}")
     %rest:path("/recipe")
-function app:create-or-edit-recipe($content as node()*) {
+function app:create-or-edit-recipe($content as document-node()) as element() {
     let $id := ($content/r:recipe/r:id/text(), util:uuid())[1]
     let $data :=
         <r:recipe>
@@ -110,9 +114,21 @@ function app:create-or-edit-recipe($content as node()*) {
         { $content/r:recipe/*[not(self::r:id)] }
         </r:recipe>
     let $log := util:log("DEBUG", "Storing data into " || $app:data)
+    let $login := xmldb:login($app:data, $app:u, $app:p)
     let $stored := xmldb:store($app:data, $id || ".xml", $data)
-    return
-        app:all-recipes()
+    return        <success/>
+};
+
+(:~
+ : Create an ID for a recipe if it has not got one already
+ :)
+declare
+    %rest:PUT("{$content}")
+    %rest:path("/get-id")
+function app:create-or-get-id($content as document-node()) as element(r:id) {
+    let $id := $content/r:id
+    let $new-id := ($id/text(), util:uuid())[1]
+    return <r:id>{$new-id}</r:id>
 };
 
 (:~
@@ -121,11 +137,11 @@ function app:create-or-edit-recipe($content as node()*) {
  : according to Saxon-JS documentation, response body is either a document node, or text
  : https://www.saxonica.com/saxon-js/documentation/index.html#!development/http
  : BUT possible bug
- : if anything other than XSML is returned we get an error 
+ : if anything other than XML is returned we get an error 
  : 405 HTTP method GET is not supported by this URL
  :)
 declare
-    %rest:DELETE
+    %rest:GET
     %rest:path("/delete/{$id}")
 function app:delete-recipe-no-param($id as xs:string*) {
     let $deleted := xmldb:remove($app:data, $id || ".xml")
@@ -140,13 +156,15 @@ function app:delete-recipe-no-param($id as xs:string*) {
  : Perhaps should not use form parameters?
  :)
 declare
-    %rest:GET
+    %rest:PUT("{$id}")
     %rest:path("/delete-recipe")
-    %rest:form-param("id", "{$id}", "")
-function app:delete-recipe($id as xs:string*) {
-    let $deleted := xmldb:remove($app:data, $id || ".xml")
+    %rest:produces("application/xml")
+function app:delete-recipe($id as document-node()) {
+    let $login := xmldb:login($app:data, $app:u, $app:p)
+    let $deleted := xmldb:remove($app:data, $id/r:id/text() || ".xml") 
     return <deleted/>
 };
+
 
 (:~
  : Reindex the recipe collection
@@ -156,7 +174,7 @@ declare
     %rest:path("/reindex-recipes")
     %rest:produces("application/xml", "text/xml")
 function app:reindex-recipes() {
-    let $login := xmldb:login($app:data, 'admin', '0verc00k')
+    let $login := xmldb:login($app:data, 'admin', '3mU3ls@doz')
     return 
     <reindex-status>
     {
