@@ -15,7 +15,7 @@ declare namespace r="http://ns.datacraft.co.uk/recipe";
 
 declare variable $app:data := $config:app-root || "/data/recipes";
 declare variable $app:u := "admin";
-declare variable $app:p := "###REPLACE###";
+declare variable $app:p := "### REPLACE ###";
 
 
 
@@ -44,8 +44,8 @@ declare
 function app:clear-recipes() {
     <r:recipes xmlns:xforms="http://www.w3.org/2002/xforms">
         <r:recipe>
-             <r:id/>
-            <r:title/>
+            <r:id/>
+             <r:title/>
              <r:ingredients>
                 <r:ingredient/>
              </r:ingredients>
@@ -100,7 +100,7 @@ function app:search-recipes($query as xs:string*, $field as xs:string*) {
 };
 
 (:~
- : Update an existing recipe or store a new one. The address XML is read
+ : Update an existing address or store a new one. The address XML is read
  : from the request body.
  :)
 declare
@@ -116,23 +116,19 @@ function app:create-or-edit-recipe($content as document-node()) as element() {
     let $log := util:log("DEBUG", "Storing data into " || $app:data)
     let $login := xmldb:login($app:data, $app:u, $app:p)
     let $stored := xmldb:store($app:data, $id || ".xml", $data)
-    return <success/>
+    return        <success/>
 };
 
 (:~
  : Create an ID for a recipe if it has not got one already
- : 
- : Use %output REST paarameter to return a string
- : (overriding the default application/xml return content type)
  :)
 declare
     %rest:PUT("{$content}")
     %rest:path("/get-id")
-    %output:method("text")
-function app:create-or-get-id($content as document-node()) as xs:string {
+function app:create-or-get-id($content as document-node()) as element(r:id) {
     let $id := $content/r:id
     let $new-id := ($id/text(), util:uuid())[1]
-    return $new-id
+    return <r:id>{$new-id}</r:id>
 };
 
 (:~
