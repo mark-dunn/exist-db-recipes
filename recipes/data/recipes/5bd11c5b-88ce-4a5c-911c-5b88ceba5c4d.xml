@@ -1,0 +1,12 @@
+<r:recipe xmlns:r="http://ns.datacraft.co.uk/recipe"><r:id>5bd11c5b-88ce-4a5c-911c-5b88ceba5c4d</r:id><r:title>Broccoli pasta</r:title><r:ingredients>
+            <r:ingredient>broccoli</r:ingredient>
+            
+            
+            <r:ingredient xmlns:rest="http://exquery.org/ns/restxq" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xs="http://www.w3.org/2001/XMLSchema">pasta</r:ingredient><r:ingredient xmlns:rest="http://exquery.org/ns/restxq" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xs="http://www.w3.org/2001/XMLSchema">garlic</r:ingredient>
+            
+            
+            
+            <r:ingredient xmlns:rest="http://exquery.org/ns/restxq" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xs="http://www.w3.org/2001/XMLSchema">lemon</r:ingredient>
+        </r:ingredients><r:method>
+            <r:step/>
+        </r:method></r:recipe>

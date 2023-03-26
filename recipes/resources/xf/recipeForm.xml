@@ -1,4 +1,4 @@
-<xf:xform xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:rest="http://exquery.org/ns/restxq" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:r="http://ns.datacraft.co.uk/recipe" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xf:xform xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:rest="http://exquery.org/ns/restxq" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:r="http://ns.datacraft.co.uk/recipe" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms">
     
     <!-- 
     
@@ -8,14 +8,19 @@
     2. xforms namespace prefix must be bound (not just xf)
     
     -->
-    <!-- 
-    
-    Have to use *: in XPaths. For some reason namespace declaration is not retained by betterForms
-    
-    Have to use namespace. For some reason betterForms treats no namespace as XHTML namespace.
-    
-    -->
     <xf:model id="m-recipes">
+        <!-- 
+            Make the default (first) instance
+            a small data field.
+            
+            (If 'all' is the default
+            we can accidentally submit
+            a huge data set.)
+        -->
+        <xf:instance id="i-current-id">
+            <id/>
+        </xf:instance>
+        
         <xf:instance id="all">
             <r:recipes>
                 <r:recipe>
@@ -37,6 +42,7 @@
         <xf:instance id="i-reindex-status">
             <reindex-status/>
         </xf:instance>
+        
         <xf:instance id="i-search-recipes">
             <parameters>
                 <query/>
@@ -56,40 +62,42 @@
 
         <!-- empty recipe -->
         <xf:instance id="i-new-recipe">
-            <r:recipe>
-                <r:id/>
-                <r:title/>
-                <r:ingredients>
-                    <r:ingredient/>
-                </r:ingredients>
-                <r:method>
-                    <r:step/>
-                </r:method>
-            </r:recipe>
+            <r:recipes>
+                <r:recipe>
+                    <r:id/>
+                    <r:title/>
+                    <r:ingredients>
+                        <r:ingredient/>
+                    </r:ingredients>
+                    <r:method>
+                        <r:step/>
+                    </r:method>
+                </r:recipe>
+            </r:recipes>
         </xf:instance>
         
         
         <xf:bind id="has-title" nodeset="instance('all')/r:recipe[1]/r:title" relevant="text() != ''"/>
         
+        <!-- Load all recipes -->
         <xf:submission id="load" resource="/exist/restxq/recipes" method="get" replace="instance" instance="all">
             <xf:action ev:event="xforms-submit-done">
                 <xf:refresh/>
             </xf:action>
         </xf:submission>
             
-        <xf:submission id="clear" resource="/exist/restxq/clear" method="get" replace="instance" instance="all">
-            <xf:action ev:event="xforms-submit-done">
-                <xf:refresh/>
-            </xf:action>
-        </xf:submission>
         
         <!-- must submit an element, to be turned into a KEV query (name = text content) -->
         <!-- for some reason does not work with DELETE method -->
-        <xf:submission id="delete-recipe" resource="/exist/restxq/delete-recipe" method="put" instance="all" ref="instance('all')/r:recipe[index('recipe-repeat')]/r:id"/>
+        <xf:submission id="delete-recipe" resource="/exist/restxq/delete-recipe" method="put" instance="all" ref="instance('all')/r:recipe[index('recipe-repeat')]/r:id">
+            <!-- when delete is done, we clear the form for a new recipe -->
+            <xf:action ev:event="xforms-submit-done">
+                <xf:setindex repeat="recipe-repeat" index="1"/>
+                <xf:insert nodeset="instance('all')" origin="instance('i-new-recipe')"/>
+                <xf:send submission="get-id"/>
+            </xf:action>
+        </xf:submission>
         
-<!--        <xf:submission id="delete-recipe" resource="/exist/restxq/delete" method="get" instance="all" ref="instance('all')/r:recipe[index('recipe-repeat')]/r:id/text()"/>-->
-
-
         <!-- confusion with previously registered RESTXQ resource "/search" in demo app !!! 
         changed to "/search-recipes"
         -->
@@ -104,29 +112,33 @@
         </xf:submission>
         
         <xf:submission id="save" resource="/exist/restxq/recipe" method="put" mediatype="application/xml" instance="all" ref="instance('all')/r:recipe[index('recipe-repeat')]"/>
+        
+        
+        <!-- 
+            "get-id" is called when a new recipe is started
+            It generates a new ID and puts it in the 
+            new recipe's r:id field
+            Then it puts the ID into the 'i-current-id' instance
+        
+        -->
         <xf:submission id="get-id" resource="/exist/restxq/get-id" method="put" mediatype="application/xml" instance="all" ref="instance('all')/r:recipe[index('recipe-repeat')]/r:id" targetref="instance('all')/r:recipe[index('recipe-repeat')]/r:id" replace="text">
-            <xf:send ev:event="xforms-submit-done" submission="save"/>
-        </xf:submission>        
+            <xf:action ev:event="xforms-submit-done">
+                <xf:insert nodeset="instance('i-current-id')" origin="instance('all')/r:recipe[index('recipe-repeat')]/r:id"/>
+                <xf:message level="ephemeral">Current recipe ID: <xf:output ref="instance('i-current-id')"/></xf:message>
+            </xf:action>
+        </xf:submission>    
+        
     </xf:model>
     
     
     <div id="content" class="dcContentBlock">
         <h2>Manage Recipes</h2>
         
-        <!-- 
-            Request gives "strict-origin-when-cross-origin" error
-            change setting in Jetty to try to fix it
-            
-            https://www.w3.org/wiki/CORS_Enabled#For_Jetty_.287_and_above.29
-            
-            Setting in file:/C:/eXist-db/etc/standalone-webapp/WEB-INF/web.xml
-            jetty-servlets jar file placeed in file:/C:/eXist-db/lib/user/
-        -->
         <xf:trigger>
             <xf:label>Get recipe ID (test)</xf:label>
             <xf:action ev:event="DOMActivate">
                 <xf:send submission="get-id"/>
-                <!--<xf:message level="ephemeral">Recipe ID returned: <xf:output ref="instance('all')/r:recipe[index('recipe-repeat')]/r:id/text()"/></xf:message>-->
+                <xf:message level="ephemeral">ID of selected recipe: <xf:output ref="instance('all')/r:recipe[index('recipe-repeat')]/r:id/text()"/></xf:message>
             </xf:action>
         </xf:trigger>
         
@@ -142,13 +154,12 @@
             </xf:item>
         </xf:select1>
         
-        <!-- saxon-forms does not understand instance() -->
-        <!-- <xf:input class="search" ref="instance('i-search-recipes')/*:query" incremental="true">-->
         <xf:input class="search" ref="instance('i-search-recipes')/query" incremental="true">
             <xf:label/>
             <xf:hint>Filter displayed recipes by entering a few characters contained in an ingredient.</xf:hint>
             <xf:send submission="search" ev:event="xforms-value-changed"/>
         </xf:input>
+        
         <xf:submit submission="search">
             <xf:label>Search</xf:label>
         </xf:submit>
@@ -158,7 +169,6 @@
                 <xf:label>Load all recipes</xf:label>
                 <xf:action ev:event="DOMActivate">
                     <xf:send submission="load"/>
-                    
                 </xf:action>
             </xf:trigger>
             
@@ -199,23 +209,24 @@
             <xf:label>New recipe</xf:label>
             <xf:action ev:event="DOMActivate">
                 <xf:setindex repeat="recipe-repeat" index="1"/>
-                <xf:send submission="clear"/>
+                <xf:insert nodeset="instance('all')" origin="instance('i-new-recipe')"/>
+                <xf:send submission="get-id"/>
             </xf:action>
         </xf:trigger>
         
         
         <!-- inside <xf:group> it got hit by "refreshElementsUsingIndexFunction-JS" and the @data-submit attribute was lost -->
-        <xf:submit submission="get-id">
+        <xf:submit submission="save">
             <xf:label>Save recipe</xf:label>
         </xf:submit>
         
         
         <xf:trigger>
-        <xf:label>Delete recipe</xf:label>
-        <xf:action ev:event="DOMActivate">
-            <xf:send submission="delete-recipe"/>
-        </xf:action>
-        </xf:trigger>
+            <xf:label>Delete recipe</xf:label>
+            <xf:action ev:event="DOMActivate">
+                <xf:send submission="delete-recipe"/>
+            </xf:action>
+       </xf:trigger>
         
         <xf:group ref="instance('all')/r:recipe[index('recipe-repeat')]" appearance="full" class="edit">
             <xf:input ref="r:title">

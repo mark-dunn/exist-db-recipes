@@ -15,7 +15,7 @@ declare namespace r="http://ns.datacraft.co.uk/recipe";
 
 declare variable $app:data := $config:app-root || "/data/recipes";
 declare variable $app:u := "admin";
-declare variable $app:p := "### REPLACE ###";
+declare variable $app:p := "3mU3ls@doz";
 
 
 
@@ -36,6 +36,10 @@ function app:all-recipes() {
 
 (:~
  : Clear recipes.
+ :
+ : MJD 2023-03-26 - no longer needed
+ : now we just use an xf:insert to replace
+ : the 'all' instance with the blank 'i-new-recipe' instance
  :)
 declare
     %rest:GET
@@ -63,6 +67,7 @@ function app:clear-recipes() {
 declare 
     %rest:GET
     %rest:path("/recipes/{$id}")
+    %rest:produces("application/xml", "text/xml")
 function app:get-recipe($id as xs:string*) {
     collection($app:data)/r:recipe[r:id/text() = $id]
 };
@@ -75,6 +80,7 @@ declare
     %rest:path("/search-recipes")
     %rest:form-param("query", "{$query}", "")
     %rest:form-param("field", "{$field}", "ingredient")
+    %rest:produces("application/xml", "text/xml")
 function app:search-recipes($query as xs:string*, $field as xs:string*) {
     let $log := util:log("DEBUG", "Searching for '" || $query || "' in field '" || $field || "'" )
     return
@@ -100,12 +106,17 @@ function app:search-recipes($query as xs:string*, $field as xs:string*) {
 };
 
 (:~
- : Update an existing address or store a new one. The address XML is read
- : from the request body.
+ : Update an existing recipe or store a new one. 
+ : The recipe XML is read from the request body.
+ :
+ : MJD 2023-03-26 - the current recipe form
+ : guarantees that an ID will be present
+ : so no need in theory for util:uuid() here
  :)
 declare
     %rest:PUT("{$content}")
     %rest:path("/recipe")
+    %rest:produces("application/xml", "text/xml")
 function app:create-or-edit-recipe($content as document-node()) as element() {
     let $id := ($content/r:recipe/r:id/text(), util:uuid())[1]
     let $data :=
@@ -125,6 +136,7 @@ function app:create-or-edit-recipe($content as document-node()) as element() {
 declare
     %rest:PUT("{$content}")
     %rest:path("/get-id")
+    %rest:produces("application/xml", "text/xml")
 function app:create-or-get-id($content as document-node()) as element(r:id) {
     let $id := $content/r:id
     let $new-id := ($id/text(), util:uuid())[1]
@@ -143,6 +155,7 @@ function app:create-or-get-id($content as document-node()) as element(r:id) {
 declare
     %rest:GET
     %rest:path("/delete/{$id}")
+    %rest:produces("application/xml", "text/xml")
 function app:delete-recipe-no-param($id as xs:string*) {
     let $deleted := xmldb:remove($app:data, $id || ".xml")
     return <deleted/>
@@ -158,7 +171,7 @@ function app:delete-recipe-no-param($id as xs:string*) {
 declare
     %rest:PUT("{$id}")
     %rest:path("/delete-recipe")
-    %rest:produces("application/xml")
+    %rest:produces("application/xml", "text/xml")
 function app:delete-recipe($id as document-node()) {
     let $login := xmldb:login($app:data, $app:u, $app:p)
     let $deleted := xmldb:remove($app:data, $id/r:id/text() || ".xml") 
@@ -174,7 +187,7 @@ declare
     %rest:path("/reindex-recipes")
     %rest:produces("application/xml", "text/xml")
 function app:reindex-recipes() {
-    let $login := xmldb:login($app:data, 'admin', '3mU3ls@doz')
+    let $login := xmldb:login($app:data, $app:u, $app:p)
     return 
     <reindex-status>
     {

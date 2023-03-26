@@ -1,10 +1,10 @@
-<r:recipe xmlns:r="http://ns.datacraft.co.uk/recipe"><r:id>2</r:id><r:title xmlns:xforms="http://www.w3.org/2002/xforms">Orange and ginger chicken</r:title><r:ingredients xmlns:xforms="http://www.w3.org/2002/xforms">
+<r:recipe xmlns:r="http://ns.datacraft.co.uk/recipe"><r:id>2</r:id><r:title>Orange and ginger chicken</r:title><r:ingredients>
                         
                         <r:ingredient>ginger</r:ingredient>
             <r:ingredient>chicken</r:ingredient>
-            <r:ingredient/>
+            
                         <r:ingredient>orange</r:ingredient>
-                    </r:ingredients><r:method xmlns:xforms="http://www.w3.org/2002/xforms">
+                    </r:ingredients><r:method>
                         <r:step>cook</r:step>
                         <r:step>cook more</r:step>
                     </r:method></r:recipe>

@@ -22,13 +22,13 @@
             <div class="well">
                 <p>A simple XForms application which talks to a RESTXQ service defining the following endpoints:</p>
                 <ul>
-                    <li>GET /recipes</li>
-                    <li>GET /clear</li>
-                    <li>PUT /recipe (XML recipe submitted as request body)</li>
-                    <li>PUT /delete-recipe (XML r:id element submitted as request body)</li>
-                    <li>GET /delete/{$id}</li>
+                    <li>GET /recipes (return all recipe data)</li>
                     <li>GET /search-recipes?query=&amp;field=</li>
                     <li>GET /reindex-recipes</li>
+                    <li>PUT /get-id (return r:id element containing new ID or submitted ID if present)</li>
+                    <li>PUT /recipe (store XML recipe submitted as request body)</li>
+                    <li>PUT /delete-recipe (XML r:id element submitted as request body)</li>
+                     
                 </ul>
                 <p>It uses a number of XForms submissions to retrieve data, search, save or delete entries.</p>
             </div>

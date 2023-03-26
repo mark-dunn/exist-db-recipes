@@ -1,4 +1,4 @@
-<package xmlns="http://expath.org/ns/pkg" name="http://localhost:8080/exist/apps/recipes" abbrev="recipes" version="0.1" spec="1.0">
+<package xmlns="http://expath.org/ns/pkg" name="http://localhost:8080/exist/apps/recipes" abbrev="recipes" version="1.0" spec="1.0">
     <title>Recipe App</title>
     <!-- 
     
