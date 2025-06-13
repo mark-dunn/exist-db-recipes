@@ -5,14 +5,14 @@
  :)
 xquery version "3.0";
 
-import module namespace templates="http://exist-db.org/xquery/templates" ;
+import module namespace templates="http://exist-db.org/xquery/html-templating" ;
 
 (: 
  : The following modules provide functions which will be called by the 
  : templating.
  :)
-import module namespace config="http://localhost:8080/exist/apps/recipes/config" at "config.xqm";
-import module namespace app="http://localhost:8080/exist/apps/recipes/templates" at "app.xql";
+import module namespace config="urn:recipes/config" at "config.xqm";
+import module namespace app="urn:recipes/app" at "app.xql";
 
 
 (:
@@ -58,7 +58,7 @@ let $config := map {
  : module cannot see the application modules, but the inline function
  : below does see them.
  :)
-let $lookup := function($functionName as xs:string, $arity as xs:int) {
+let $lookup := function($functionName as xs:string, $arity as xs:integer) {
     try {
         function-lookup(xs:QName($functionName), $arity)
     } catch * {

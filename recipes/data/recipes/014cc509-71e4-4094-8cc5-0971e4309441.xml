@@ -1,0 +1,24 @@
+<r:recipe xmlns:r="http://ns.datacraft.co.uk/recipe"><r:id>014cc509-71e4-4094-8cc5-0971e4309441</r:id><r:title>Mapo tofu</r:title><r:ingredients>
+                        <r:ingredient>450g soft tofu</r:ingredient>
+            <r:ingredient>100g quorn mince or chopped mushrooms</r:ingredient>
+            <r:ingredient>3tbsp chopped ginger</r:ingredient>
+            <r:ingredient>3tbsp chopped garlic</r:ingredient>
+            <r:ingredient>1tbsp sichuan peppercorns</r:ingredient>
+            <r:ingredient>0.5 jar black bean sauce</r:ingredient>
+            <r:ingredient>200ml vegetable stock</r:ingredient>
+            <r:ingredient>1tsp cornflour mixed with 1tbsp water</r:ingredient>
+            <r:ingredient>1 bunch spring onions, chopped</r:ingredient>
+                    </r:ingredients><r:method>
+                        <r:step>Cut tofu into bite sized pieces and cover with very hot water during cooking</r:step><r:step>Coarsely grind peppercorns and fry in oil for 30s</r:step>
+            
+            <r:step>Add ginger and fry for 1 minute</r:step>
+            <r:step>Add garlic and fry for 1 minute</r:step>
+            <r:step>Add mince/mushrooms and fry for 5 minutes</r:step>
+            <r:step>Add sauce</r:step>
+            <r:step>Add spring onions</r:step>
+            <r:step>Add vegetable stock</r:step>
+            <r:step>Add cornflour and water</r:step>
+            <r:step>Add tofu and simmer for 3-5 minutes</r:step>
+            <r:step>Serve with rice</r:step><r:step>Save some spring onion for garnish if desired</r:step>
+            
+                    </r:method></r:recipe>

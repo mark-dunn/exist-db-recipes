@@ -1,10 +1,8 @@
 <r:recipe xmlns:r="http://ns.datacraft.co.uk/recipe"><r:id>2</r:id><r:title>Orange and ginger chicken</r:title><r:ingredients>
+                        <r:ingredient>ginger</r:ingredient><r:ingredient>daed</r:ingredient><r:ingredient>chicken</r:ingredient>
                         
-                        <r:ingredient>ginger</r:ingredient>
-            <r:ingredient>chicken</r:ingredient>
-            
                         <r:ingredient>orange</r:ingredient>
                     </r:ingredients><r:method>
-                        <r:step>cook</r:step>
-                        <r:step>cook more</r:step>
+                        
+                        <r:step>cook more</r:step><r:step>cook</r:step>
                     </r:method></r:recipe>

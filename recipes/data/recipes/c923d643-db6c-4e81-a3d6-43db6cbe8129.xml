@@ -1,0 +1,5 @@
+<r:recipe xmlns:r="http://ns.datacraft.co.uk/recipe"><r:id>c923d643-db6c-4e81-a3d6-43db6cbe8129</r:id><r:title>Pancakes by Gary</r:title><r:ingredients>
+                        <r:ingredient>12 tbsp flour</r:ingredient><r:ingredient>2 eggs</r:ingredient><r:ingredient>8 tbsp milk</r:ingredient><r:ingredient>8 tbsp water</r:ingredient>
+                    </r:ingredients><r:method>
+                        <r:step>Sift flour</r:step><r:step>Add eggs to flour and mix with fork </r:step><r:step>Add milk and water </r:step><r:step>Beat until lumps are gone</r:step>
+                    </r:method></r:recipe>

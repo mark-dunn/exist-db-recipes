@@ -9,5 +9,5 @@
     <target>recipes</target>
     <prepare>pre-install.xql</prepare>
     <finish/>
-    <deployed>2017-07-14T14:13:49.209+01:00</deployed>
-</meta>
+    
+<deployed>2025-06-07T22:40:52.211+01:00</deployed></meta>

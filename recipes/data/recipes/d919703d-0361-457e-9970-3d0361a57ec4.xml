@@ -1,0 +1,19 @@
+<r:recipe xmlns:r="http://ns.datacraft.co.uk/recipe"><r:id>d919703d-0361-457e-9970-3d0361a57ec4</r:id><r:step/><r:step/><r:step/><r:title>Red lentil dal</r:title><r:ingredients>
+                        <r:ingredient>1 onion</r:ingredient>
+            <r:ingredient>5 cloves garlic</r:ingredient>
+            <r:ingredient>1 tbsp ginger</r:ingredient>
+            <r:ingredient>1 tbsp garam masala</r:ingredient>
+            <r:ingredient>1 tsp turmeric</r:ingredient>
+            <r:ingredient>1/2 tsp chilli flakes</r:ingredient>
+            <r:ingredient>300g red lentils (1.5 cups)</r:ingredient>
+            <r:ingredient>400g can chopped tomatoes</r:ingredient>
+            <r:ingredient>700ml vegetable stock (3 cups)</r:ingredient>
+            <r:ingredient>Juice of half a lemon</r:ingredient>
+            <r:ingredient>300g baby spinach (3-4 cups)</r:ingredient><r:ingredient xmlns:rest="http://exquery.org/ns/restxq" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms">400ml can coconut milk</r:ingredient>
+                    </r:ingredients><r:method>
+                        <r:step>Fry onion and garlic with oil and spices</r:step>
+            <r:step>Add lentils, tomatoes, and some stock</r:step>
+            <r:step>Add more stock as it gets absorbed </r:step>
+            <r:step xmlns:rest="http://exquery.org/ns/restxq" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms">Add coconut milk</r:step><r:step>Add spinach near the end (20 minutes?)</r:step>
+            <r:step>Add lemon juice just before serving</r:step>
+                    </r:method></r:recipe>

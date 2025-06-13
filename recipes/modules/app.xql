@@ -1,13 +1,9 @@
 xquery version "3.0";
 
-module namespace app="http://localhost:8080/exist/apps/recipes/templates";
+module namespace app="urn:recipes/app";
 
-
-import module namespace xrest="http://exquery.org/ns/restxq/exist" at "java:org.exist.extensions.exquery.restxq.impl.xquery.exist.ExistRestXqModule";
-
-
-(:import module namespace templates="http://exist-db.org/xquery/templates" ;:)
-import module namespace config="http://localhost:8080/exist/apps/recipes/config" at "config.xqm";
+(:import module namespace xrest="http://exquery.org/ns/restxq/exist" at "java:org.exist.extensions.exquery.restxq.impl.xquery.exist.ExistRestXqModule";:)
+import module namespace config="urn:recipes/config" at "config.xqm";
 
 declare namespace rest="http://exquery.org/ns/restxq";
 declare namespace output="http://www.w3.org/2010/xslt-xquery-serialization";

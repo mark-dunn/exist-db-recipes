@@ -1,17 +1,25 @@
-<package xmlns="http://expath.org/ns/pkg" name="http://localhost:8080/exist/apps/recipes" abbrev="recipes" version="1.0" spec="1.0">
+<package xmlns="http://expath.org/ns/pkg" name="http://localhost:8080/exist/apps/recipes" abbrev="recipes" version="1.1" spec="1.0">
     <title>Recipe App</title>
     <!-- 
     
     This file defines the packages used by the app
+   
+    -->
+    <home>https://github.com/mark-dunn/exist-db-recipes</home>
     
+    <dependency package="http://exist-db.org/html-templating" semver-min="1.2.0"/>
+    
+    
+    <!-- 
     "http://exist-db.org/apps/shared" is the name for
     
     /db/apps/shared-resources/expath-pkg.xml
     
     which in turn includes other packages, e.g. templates.xql
     
+    (Shared resources deprecated in Elemental)
     -->
-    <dependency package="http://exist-db.org/apps/shared"/>
+    <!--<dependency package="http://exist-db.org/apps/shared"/>-->
     
     <!-- 
     

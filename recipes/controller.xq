@@ -3,7 +3,7 @@ xquery version "3.0";
 (: 
  : Main controller.
  :)
-import module namespace app="http://localhost:8080/exist/apps/recipes/templates" at "modules/app.xql";
+import module namespace app="urn:recipes/app" at "modules/app.xql";
 
 declare variable $exist:path external;
 declare variable $exist:resource external;
