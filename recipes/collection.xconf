@@ -1,9 +1,16 @@
 <collection xmlns="http://exist-db.org/collection-config/1.0" xmlns:r="http://ns.datacraft.co.uk/recipe">
-    <!--<triggers>
+    <!-- 
+        MD 2025-06-15
+        
+        The pre-install.xql script copies this lucene configuration to
+        /db/system/config/db/apps/recipes
+
+    -->
+    <triggers>
         <trigger class="org.exist.extensions.exquery.restxq.impl.RestXqTrigger"/>
-    </triggers>-->
+    </triggers>
     <index>
-        <ngram qname="r:title"/>
         <ngram qname="r:ingredient"/>
+        <ngram qname="r:title"/>
     </index>
 </collection>
